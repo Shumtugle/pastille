@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Pastille</string>
+    <string name="widget_description">Six phrases. Tap one and it is on the clipboard.</string>
+    <string name="pill_empty">Add a phrase</string>
+    <string name="pill_empty_short">Add</string>
+    <string name="pill_copied">Copied</string>
+    <string name="edit_short">edit</string>
+    <string name="edit_phrases">Edit phrases</string>
+    <string name="a11y_copy">Copy: %1$s</string>
+    <string name="a11y_empty">Empty slot %1$d: open the editor</string>
+    <string name="a11y_back">Back</string>
+
+    <string name="editor_title">Six phrases</string>
+    <string name="editor_intro">The label is shown on the pill, the text goes to the clipboard. Without a label the pill shows the start of the text.</string>
+    <string name="editor_glass">Glass</string>
+    <string name="editor_slot">Pill %1$d</string>
+    <string name="editor_label">Label</string>
+    <string name="editor_label_hint">Short, optional</string>
+    <string name="editor_text">Text</string>
+    <string name="editor_text_hint">What goes to the clipboard</string>
+    <string name="editor_clear">Clear</string>
+    <string name="editor_done">Done</string>
+    <string name="editor_save_failed">Could not save. Try again.</string>
+
+    <string name="main_intro">Six phrases under your thumb. Put the line on the home screen and fill the pills: one tap copies a phrase, then paste it anywhere. Stretch the widget wider for more pills in the line, taller for two or three rows.</string>
+    <string name="main_section">On the home screen</string>
+    <string name="main_none">No widget on the home screen yet.</string>
+    <string name="main_widget">Widget %1$d</string>
+    <string name="main_widget_empty">no phrases yet</string>
+    <string name="main_add">Add to home screen</string>
+    <string name="main_add_manual">Your launcher adds widgets by hand: hold an empty spot on the home screen, open Widgets and find Pastille.</string>
+</resources>

@@ -1,0 +1,88 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/background" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/glass_40"
+    android:orientation="vertical" android:padding="7dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:orientation="horizontal">
+        <LinearLayout android:id="@+id/pill0" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:layout_margin="3dp" android:orientation="horizontal"
+            android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="12dp"
+            android:background="@drawable/pill_idle" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/icon0" android:layout_width="16dp" android:layout_height="16dp"
+                android:scaleType="center" android:src="@drawable/dot_0" android:importantForAccessibility="no" />
+            <TextView android:id="@+id/label0" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginStart="8dp" android:textSize="14sp" android:textColor="#F5F1E8"
+                android:fontFamily="sans-serif-medium" android:maxLines="2" android:ellipsize="end"
+                android:includeFontPadding="false" android:text="@string/pill_empty" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/pill1" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:layout_margin="3dp" android:orientation="horizontal"
+            android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="12dp"
+            android:background="@drawable/pill_idle" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/icon1" android:layout_width="16dp" android:layout_height="16dp"
+                android:scaleType="center" android:src="@drawable/dot_1" android:importantForAccessibility="no" />
+            <TextView android:id="@+id/label1" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginStart="8dp" android:textSize="14sp" android:textColor="#F5F1E8"
+                android:fontFamily="sans-serif-medium" android:maxLines="2" android:ellipsize="end"
+                android:includeFontPadding="false" android:text="@string/pill_empty" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/pill2" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:layout_margin="3dp" android:orientation="horizontal"
+            android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="12dp"
+            android:background="@drawable/pill_idle" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/icon2" android:layout_width="16dp" android:layout_height="16dp"
+                android:scaleType="center" android:src="@drawable/dot_2" android:importantForAccessibility="no" />
+            <TextView android:id="@+id/label2" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginStart="8dp" android:textSize="14sp" android:textColor="#F5F1E8"
+                android:fontFamily="sans-serif-medium" android:maxLines="2" android:ellipsize="end"
+                android:includeFontPadding="false" android:text="@string/pill_empty" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:orientation="horizontal">
+        <LinearLayout android:id="@+id/pill3" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:layout_margin="3dp" android:orientation="horizontal"
+            android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="12dp"
+            android:background="@drawable/pill_idle" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/icon3" android:layout_width="16dp" android:layout_height="16dp"
+                android:scaleType="center" android:src="@drawable/dot_3" android:importantForAccessibility="no" />
+            <TextView android:id="@+id/label3" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginStart="8dp" android:textSize="14sp" android:textColor="#F5F1E8"
+                android:fontFamily="sans-serif-medium" android:maxLines="2" android:ellipsize="end"
+                android:includeFontPadding="false" android:text="@string/pill_empty" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/pill4" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:layout_margin="3dp" android:orientation="horizontal"
+            android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="12dp"
+            android:background="@drawable/pill_idle" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/icon4" android:layout_width="16dp" android:layout_height="16dp"
+                android:scaleType="center" android:src="@drawable/dot_4" android:importantForAccessibility="no" />
+            <TextView android:id="@+id/label4" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginStart="8dp" android:textSize="14sp" android:textColor="#F5F1E8"
+                android:fontFamily="sans-serif-medium" android:maxLines="2" android:ellipsize="end"
+                android:includeFontPadding="false" android:text="@string/pill_empty" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/pill5" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"
+            android:layout_margin="3dp" android:orientation="horizontal"
+            android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="12dp"
+            android:background="@drawable/pill_idle" android:clickable="true" android:focusable="true">
+            <ImageView android:id="@+id/icon5" android:layout_width="16dp" android:layout_height="16dp"
+                android:scaleType="center" android:src="@drawable/dot_5" android:importantForAccessibility="no" />
+            <TextView android:id="@+id/label5" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginStart="8dp" android:textSize="14sp" android:textColor="#F5F1E8"
+                android:fontFamily="sans-serif-medium" android:maxLines="2" android:ellipsize="end"
+                android:includeFontPadding="false" android:text="@string/pill_empty" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="26dp"
+        android:orientation="horizontal" android:gravity="center_vertical|end">
+        <LinearLayout android:id="@+id/edit" android:layout_width="wrap_content" android:layout_height="match_parent"
+            android:orientation="horizontal" android:gravity="center_vertical"
+            android:paddingStart="10dp" android:paddingEnd="10dp" android:background="@drawable/edit_bg"
+            android:clickable="true" android:focusable="true" android:contentDescription="@string/edit_phrases">
+            <ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@drawable/ic_edit"
+                android:importantForAccessibility="no" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginStart="6dp" android:text="@string/edit_short" android:textSize="12sp"
+                android:textColor="#A6F5F1E8" android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
