@@ -81,7 +81,8 @@ public class PastilleWidget extends AppWidgetProvider {
         }
         RemoteViews v = new RemoteViews(c.getPackageName(), layout);
         v.setInt(android.R.id.background, "setBackgroundResource", glassDrawable(PillStore.glass(c, widgetId)));
-        float sp = line && visible >= 5 ? 13f : 14f;
+        // Line pills are tight: a smaller face leaves a short label its whole width.
+        float sp = line ? 13f : 14f;
 
         for (int i = 0; i < PillStore.COUNT; i++) {
             if (i >= visible) {

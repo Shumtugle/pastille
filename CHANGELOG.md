@@ -1,5 +1,12 @@
 # Changes
 
+## 1.2
+
+- Pills in the line are tighter: smaller margins and dot, a 13 sp face.
+  At four cells wide a label now has room for five or six letters; in 1.1
+  even four were cut.
+- The project page sits next to the APK, with a live line to try.
+
 ## 1.1
 
 - A single line of glass by default, four cells wide: four pills and a

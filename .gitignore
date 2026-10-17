@@ -1,5 +1,6 @@
 /out/
 *.apk
+!docs/*.apk
 *.keystore
 *.jks
 *.p12

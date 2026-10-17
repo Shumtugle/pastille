@@ -4,67 +4,67 @@
     android:orientation="horizontal" android:gravity="center_vertical" android:paddingStart="7dp" android:paddingEnd="7dp">
         <LinearLayout android:id="@+id/pill0" android:layout_width="0dp" android:layout_height="46dp" android:layout_weight="1"
             android:layout_margin="3dp" android:orientation="horizontal"
-            android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="12dp"
+            android:gravity="center_vertical" android:paddingStart="10dp" android:paddingEnd="8dp"
             android:background="@drawable/pill_idle" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/icon0" android:layout_width="16dp" android:layout_height="16dp"
+            <ImageView android:id="@+id/icon0" android:layout_width="12dp" android:layout_height="12dp"
                 android:scaleType="center" android:src="@drawable/dot_0" android:importantForAccessibility="no" />
             <TextView android:id="@+id/label0" android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginStart="8dp" android:textSize="14sp" android:textColor="#F5F1E8"
+                android:layout_marginStart="6dp" android:textSize="13sp" android:textColor="#F5F1E8"
                 android:fontFamily="sans-serif-medium" android:maxLines="2" android:ellipsize="end"
                 android:includeFontPadding="false" android:text="@string/pill_empty" />
         </LinearLayout>
         <LinearLayout android:id="@+id/pill1" android:layout_width="0dp" android:layout_height="46dp" android:layout_weight="1"
             android:layout_margin="3dp" android:orientation="horizontal"
-            android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="12dp"
+            android:gravity="center_vertical" android:paddingStart="10dp" android:paddingEnd="8dp"
             android:background="@drawable/pill_idle" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/icon1" android:layout_width="16dp" android:layout_height="16dp"
+            <ImageView android:id="@+id/icon1" android:layout_width="12dp" android:layout_height="12dp"
                 android:scaleType="center" android:src="@drawable/dot_1" android:importantForAccessibility="no" />
             <TextView android:id="@+id/label1" android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginStart="8dp" android:textSize="14sp" android:textColor="#F5F1E8"
+                android:layout_marginStart="6dp" android:textSize="13sp" android:textColor="#F5F1E8"
                 android:fontFamily="sans-serif-medium" android:maxLines="2" android:ellipsize="end"
                 android:includeFontPadding="false" android:text="@string/pill_empty" />
         </LinearLayout>
         <LinearLayout android:id="@+id/pill2" android:layout_width="0dp" android:layout_height="46dp" android:layout_weight="1"
             android:layout_margin="3dp" android:orientation="horizontal"
-            android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="12dp"
+            android:gravity="center_vertical" android:paddingStart="10dp" android:paddingEnd="8dp"
             android:background="@drawable/pill_idle" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/icon2" android:layout_width="16dp" android:layout_height="16dp"
+            <ImageView android:id="@+id/icon2" android:layout_width="12dp" android:layout_height="12dp"
                 android:scaleType="center" android:src="@drawable/dot_2" android:importantForAccessibility="no" />
             <TextView android:id="@+id/label2" android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginStart="8dp" android:textSize="14sp" android:textColor="#F5F1E8"
+                android:layout_marginStart="6dp" android:textSize="13sp" android:textColor="#F5F1E8"
                 android:fontFamily="sans-serif-medium" android:maxLines="2" android:ellipsize="end"
                 android:includeFontPadding="false" android:text="@string/pill_empty" />
         </LinearLayout>
         <LinearLayout android:id="@+id/pill3" android:layout_width="0dp" android:layout_height="46dp" android:layout_weight="1"
             android:layout_margin="3dp" android:orientation="horizontal"
-            android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="12dp"
+            android:gravity="center_vertical" android:paddingStart="10dp" android:paddingEnd="8dp"
             android:background="@drawable/pill_idle" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/icon3" android:layout_width="16dp" android:layout_height="16dp"
+            <ImageView android:id="@+id/icon3" android:layout_width="12dp" android:layout_height="12dp"
                 android:scaleType="center" android:src="@drawable/dot_3" android:importantForAccessibility="no" />
             <TextView android:id="@+id/label3" android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginStart="8dp" android:textSize="14sp" android:textColor="#F5F1E8"
+                android:layout_marginStart="6dp" android:textSize="13sp" android:textColor="#F5F1E8"
                 android:fontFamily="sans-serif-medium" android:maxLines="2" android:ellipsize="end"
                 android:includeFontPadding="false" android:text="@string/pill_empty" />
         </LinearLayout>
         <LinearLayout android:id="@+id/pill4" android:layout_width="0dp" android:layout_height="46dp" android:layout_weight="1"
             android:layout_margin="3dp" android:orientation="horizontal"
-            android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="12dp"
+            android:gravity="center_vertical" android:paddingStart="10dp" android:paddingEnd="8dp"
             android:background="@drawable/pill_idle" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/icon4" android:layout_width="16dp" android:layout_height="16dp"
+            <ImageView android:id="@+id/icon4" android:layout_width="12dp" android:layout_height="12dp"
                 android:scaleType="center" android:src="@drawable/dot_4" android:importantForAccessibility="no" />
             <TextView android:id="@+id/label4" android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginStart="8dp" android:textSize="14sp" android:textColor="#F5F1E8"
+                android:layout_marginStart="6dp" android:textSize="13sp" android:textColor="#F5F1E8"
                 android:fontFamily="sans-serif-medium" android:maxLines="2" android:ellipsize="end"
                 android:includeFontPadding="false" android:text="@string/pill_empty" />
         </LinearLayout>
         <LinearLayout android:id="@+id/pill5" android:layout_width="0dp" android:layout_height="46dp" android:layout_weight="1"
             android:layout_margin="3dp" android:orientation="horizontal"
-            android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="12dp"
+            android:gravity="center_vertical" android:paddingStart="10dp" android:paddingEnd="8dp"
             android:background="@drawable/pill_idle" android:clickable="true" android:focusable="true">
-            <ImageView android:id="@+id/icon5" android:layout_width="16dp" android:layout_height="16dp"
+            <ImageView android:id="@+id/icon5" android:layout_width="12dp" android:layout_height="12dp"
                 android:scaleType="center" android:src="@drawable/dot_5" android:importantForAccessibility="no" />
             <TextView android:id="@+id/label5" android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_marginStart="8dp" android:textSize="14sp" android:textColor="#F5F1E8"
+                android:layout_marginStart="6dp" android:textSize="13sp" android:textColor="#F5F1E8"
                 android:fontFamily="sans-serif-medium" android:maxLines="2" android:ellipsize="end"
                 android:includeFontPadding="false" android:text="@string/pill_empty" />
         </LinearLayout>

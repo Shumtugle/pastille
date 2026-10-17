@@ -16,13 +16,15 @@
    earlier release, or phones will refuse the update:
 
    ```sh
-   apksigner verify --print-certs out/pastille-1.1.apk
+   apksigner verify --print-certs out/pastille-1.2.apk
    ```
 
-5. Commit and push. Then, on the repository page, draft a new release with a
-   new tag such as `v1.1`, paste the version's section of the changelog, and
+5. Put the new APK into `docs/` beside the page, remove the previous one,
+   and point the page's download button and its version line at it.
+6. Commit and push. Then, on the repository page, draft a new release with a
+   new tag such as `v1.2`, paste the version's section of the changelog, and
    attach the APK.
-6. The project page is the `docs` folder. Once, in the repository settings,
+7. The project page is the `docs` folder. Once, in the repository settings,
    set the pages source to the `docs` folder of the main branch.
 
 The signing key never goes into the repository: `.gitignore` keeps keystores
