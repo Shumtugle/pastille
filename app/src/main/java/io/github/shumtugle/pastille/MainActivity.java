@@ -112,7 +112,7 @@ public class MainActivity extends Activity {
 
     private String summary(int widgetId) {
         StringBuilder b = new StringBuilder();
-        for (int i = 0; i < PillStore.COUNT; i++) {
+        for (int i = 0; i < PillStore.MAX; i++) {
             String s = PillStore.shown(this, widgetId, i);
             if (s.isEmpty()) continue;
             if (b.length() > 0) b.append(" · ");

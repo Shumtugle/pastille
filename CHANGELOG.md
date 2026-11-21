@@ -1,5 +1,17 @@
 # Changes
 
+## 1.3
+
+- The round button at the end of the line is now an arrow. It drops a panel of
+  glass right under the widget with the phrases that did not fit in the line.
+  A tap there copies, the pill flashes, and the panel folds away; a tap
+  outside folds it without copying.
+- A widget holds up to twenty-four phrases. The first sit on the widget, as
+  many as its width allows; the rest wait under the arrow.
+- The editor grows plate by plate with "Add a phrase" and shows where the
+  widget ends and the drop-down begins. Editing moved into the drop-down.
+- In two and three rows the footer says "more" and opens the same panel.
+
 ## 1.2
 
 - Pills in the line are tighter: smaller margins and dot, a 13 sp face.

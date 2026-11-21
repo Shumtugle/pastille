@@ -6,12 +6,20 @@
     <string name="pill_copied">Copied</string>
     <string name="edit_short">edit</string>
     <string name="edit_phrases">Edit phrases</string>
+    <string name="more_short">more</string>
+    <string name="a11y_more">More phrases</string>
+    <string name="drop_empty">Nothing under the arrow yet. Phrases that do not fit on the widget wait here.</string>
+    <string name="drop_add">+ Add</string>
     <string name="a11y_copy">Copy: %1$s</string>
     <string name="a11y_empty">Empty slot %1$d: open the editor</string>
     <string name="a11y_back">Back</string>
 
     <string name="editor_title">Six phrases</string>
-    <string name="editor_intro">The label is shown on the pill, the text goes to the clipboard. Without a label the pill shows the start of the text.</string>
+    <string name="editor_intro">The label is shown on the pill, the text goes to the clipboard. Without a label the pill shows the start of the text. What does not fit on the widget waits under its arrow.</string>
+    <string name="editor_on_widget">On the widget</string>
+    <string name="editor_under_arrow">Under the arrow</string>
+    <string name="editor_under_arrow_hint">Tap the arrow on the widget and these drop down below it.</string>
+    <string name="editor_add">+ Add a phrase</string>
     <string name="editor_glass">Glass</string>
     <string name="editor_slot">Pill %1$d</string>
     <string name="editor_label">Label</string>

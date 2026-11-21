@@ -41,7 +41,7 @@ public class PastilleWidget extends AppWidgetProvider {
     /** Heights (dp) at which the pills leave the single line for two, then three rows. */
     private static final int TWO_ROWS_FROM = 100;
     private static final int THREE_ROWS_FROM = 175;
-    /** Line mode: the edit circle and side padding (dp), and the narrowest pill worth showing. */
+    /** Line mode: the arrow circle and side padding (dp), and the narrowest pill worth showing. */
     private static final int LINE_CHROME = 66;
     private static final int LINE_PILL_MIN = 78;
 
@@ -71,11 +71,12 @@ public class PastilleWidget extends AppWidgetProvider {
         int h = o == null ? 0 : o.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, 0);
 
         int layout;
-        int visible = PillStore.COUNT;
+        int visible = PillStore.ON_WIDGET;
         boolean line = h < TWO_ROWS_FROM;
         if (line) {
             layout = R.layout.widget_line;
-            visible = w <= 0 ? 4 : Math.max(1, Math.min(PillStore.COUNT, (w - LINE_CHROME) / LINE_PILL_MIN));
+            visible = w <= 0 ? PillStore.VISIBLE_DEFAULT
+                    : Math.max(1, Math.min(PillStore.ON_WIDGET, (w - LINE_CHROME) / LINE_PILL_MIN));
         } else {
             layout = h < THREE_ROWS_FROM ? R.layout.widget_rows2 : R.layout.widget_rows3;
         }
@@ -84,7 +85,10 @@ public class PastilleWidget extends AppWidgetProvider {
         // Line pills are tight: a smaller face leaves a short label its whole width.
         float sp = line ? 13f : 14f;
 
-        for (int i = 0; i < PillStore.COUNT; i++) {
+        // The drop-down shows whatever did not fit here, so it has to know where the widget stopped.
+        PillStore.setVisible(c, widgetId, visible);
+
+        for (int i = 0; i < PillStore.ON_WIDGET; i++) {
             if (i >= visible) {
                 v.setViewVisibility(PILL[i], View.GONE);
                 continue;
@@ -116,7 +120,7 @@ public class PastilleWidget extends AppWidgetProvider {
             v.setContentDescription(PILL[i], c.getString(R.string.a11y_copy, shown));
             v.setOnClickPendingIntent(PILL[i], copyIntent(c, widgetId, i));
         }
-        v.setOnClickPendingIntent(R.id.edit, EditorActivity.pending(c, widgetId, -1));
+        v.setOnClickPendingIntent(R.id.more, DropActivity.pending(c, widgetId));
         m.updateAppWidget(widgetId, v);
     }
 
@@ -144,7 +148,7 @@ public class PastilleWidget extends AppWidgetProvider {
         final Context c = context.getApplicationContext();
         final int id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         final int slot = intent.getIntExtra(EXTRA_SLOT, -1);
-        if (id == AppWidgetManager.INVALID_APPWIDGET_ID || slot < 0 || slot >= PillStore.COUNT) return;
+        if (id == AppWidgetManager.INVALID_APPWIDGET_ID || slot < 0 || slot >= PillStore.ON_WIDGET) return;
 
         // The text is read at tap time, so an edit never leaves a stale phrase in a PendingIntent.
         String text = PillStore.text(c, id, slot);

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pastille — six phrases under your thumb</title>
-<meta name="description" content="A glass home-screen widget for Android: six pills, one tap puts a phrase on the clipboard. No permissions, no internet.">
+<meta name="description" content="A glass home-screen widget for Android: a line of pills, more under its arrow; one tap puts a phrase on the clipboard. No permissions, no internet.">
 <meta property="og:title" content="Pastille">
 <meta property="og:description" content="Six phrases under your thumb. One tap, and the phrase is on the clipboard.">
 <meta property="og:type" content="website">
@@ -35,8 +35,8 @@
   .top img{width:34px;height:34px;border-radius:50%}
   .top b{color:var(--text)}
 
-  header{padding:26px 0 46px;display:grid;grid-template-columns:1fr;gap:30px}
-  @media (min-width:760px){ header{grid-template-columns:1fr 1fr;align-items:center;gap:38px} }
+  header{padding:26px 0 46px;display:grid;grid-template-columns:minmax(0,1fr);gap:30px}
+  @media (min-width:760px){ header{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:38px} }
   h1{font-size:58px;line-height:1;margin:0 0 12px;font-weight:800;letter-spacing:.10em;text-transform:uppercase}
   .dots{display:flex;gap:8px;margin:0 0 18px}
   .dots i{width:12px;height:12px;border-radius:50%;display:block}
@@ -58,6 +58,17 @@
   .pill.on{color:#0E1014;justify-content:center;padding:0 8px}
   .pill.empty{border-style:dashed;color:rgba(245,241,232,.65);font-weight:500;cursor:default}
   .edit{flex-shrink:0;width:46px;height:46px;margin:3px;border-radius:50%;border:1px solid var(--edge);background:var(--pill);display:flex;align-items:center;justify-content:center}
+  button.edit{all:unset;box-sizing:border-box;flex-shrink:0;width:46px;height:46px;margin:3px;border-radius:50%;border:1px solid var(--edge);background:var(--pill);display:flex;align-items:center;justify-content:center;cursor:pointer}
+  button.edit:focus-visible{outline:2px solid var(--text);outline-offset:2px}
+  .more svg{transition:transform .18s ease}
+  .more.open svg{transform:rotate(180deg)}
+  .drop{border-radius:30px;border:1px solid var(--edge);background:rgba(14,16,20,.92);padding:7px 7px 2px;box-shadow:0 12px 30px rgba(0,0,0,.45);animation:drop .16s ease-out}
+  .drop[hidden]{display:none}
+  @keyframes drop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+  .dropgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dropgrid .pill{height:52px;border-radius:26px;gap:9px;padding:0 12px 0 14px;font-size:14px}
+  .dropfoot{display:flex;justify-content:space-between;align-items:center;height:40px;padding:0 12px;font-size:13px;font-weight:600;color:rgba(245,241,232,.65)}
+  .dropfoot span{display:flex;align-items:center;gap:6px}
   .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
   .grid3 .pill{height:52px;border-radius:26px;gap:8px;padding:0 12px 0 14px;font-size:14px}
   .foot{height:26px;display:flex;justify-content:flex-end;align-items:center;gap:6px;padding:0 10px;font-size:12px;font-weight:600;color:rgba(245,241,232,.65)}
@@ -95,7 +106,7 @@
 
   <div class="top">
     <img src="icon.png" alt="Pastille icon">
-    <span><b>Pastille</b> — version 1.2 · Android 8.0+ · 55 kB</span>
+    <span><b>Pastille</b> — version 1.3 · Android 8.0+ · 59 kB</span>
   </div>
 
   <header>
@@ -105,14 +116,18 @@
       <p class="lede">Six phrases under your thumb.</p>
       <p class="sub">A line of glass on the home screen. Tap a pill and its phrase is on the clipboard, ready to paste into any message, form or note.</p>
       <div class="cta">
-        <a class="btn" href="pastille-1.2.apk">Download APK</a>
+        <a class="btn" href="pastille-1.3.apk">Download APK</a>
         <a class="btn ghost" href="https://github.com/Shumtugle/pastille">Source on GitHub</a>
       </div>
       <p class="fine">No permissions at all. No internet, no accounts, no ads, no tracking.</p>
     </div>
     <div class="wall">
       <div class="card" id="live"></div>
-      <div class="clip" id="clip" aria-live="polite">Tap a pill. On this page it really copies.</div>
+      <div class="drop" id="drop" hidden>
+        <div class="dropgrid" id="dropgrid"></div>
+        <div class="dropfoot"><span>+ Add</span><span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>edit</span></div>
+      </div>
+      <div class="clip" id="clip" aria-live="polite">Tap a pill, or the arrow for the rest. On this page it really copies.</div>
     </div>
   </header>
 
@@ -124,6 +139,7 @@
     <ul class="rules">
       <li><b>One tap, no window.</b> The phrase goes to the clipboard straight from the home screen. Nothing opens, nothing flickers; the pill floods with its own colour for a moment and returns.</li>
       <li><b>Colour by place.</b> Each of the six places has its own colour, and it never moves. The hand learns that the blue pill says "busy" before the eye has read the label.</li>
+      <li><b>More under the arrow.</b> The line holds as many pills as fit; the round arrow at its end drops a panel of glass right under the widget with the rest, up to twenty-four phrases in all. A tap there copies just the same, and the panel folds away.</li>
       <li><b>An empty pill asks to be filled.</b> A dashed outline. Tap it and the editor opens on exactly that slot.</li>
       <li><b>Leaving saves.</b> Back, Done, Home, a swipe away: whatever was typed in the editor is kept. There is no way to lose six phrases by a slip of the thumb.</li>
       <li><b>Every widget is its own.</b> Put two on the home screen, one for work and one for home, and each keeps its own six phrases and its own glass.</li>
@@ -133,7 +149,7 @@
   <section>
     <p class="eyebrow">On the home screen</p>
     <h2>A line that grows the way you pull it</h2>
-    <p>It starts as a single line four cells wide: four pills and a round edit button. Pull it wider and more pills fit, up to six; narrower, fewer. Pull it taller and the six pills fold into two rows of three, then three rows of two. The glass behind them dims in four steps, from 10 percent, almost invisible, to 90.</p>
+    <p>It starts as a single line four cells wide: four pills and a round arrow. Pull it wider and more pills fit, up to six; narrower, fewer. Pull it taller and the six pills fold into two rows of three, then three rows of two. The glass behind them dims in four steps, from 10 percent, almost invisible, to 90.</p>
     <div class="sizes">
       <figure>
         <div class="wall"><div class="card" style="background:rgba(14,16,20,.70)">
@@ -142,7 +158,7 @@
           <span class="pill"><span class="dot" style="background:var(--h3)"></span><span class="t">Busy</span></span>
           <span class="pill opt"><span class="dot" style="background:var(--h4)"></span><span class="t">Order</span></span>
           <span class="pill empty opt"><span class="t">+ Add</span></span>
-          <span class="edit" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5F1E8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg></span>
+          <span class="edit" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5F1E8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></span>
         </div></div>
         <figcaption>Five cells wide, glass at 70 percent. The fifth place is still empty.</figcaption>
       </figure>
@@ -156,7 +172,7 @@
             <span class="pill"><span class="dot" style="background:var(--h5)"></span><span class="t">Address</span></span>
             <span class="pill"><span class="dot" style="background:var(--h6)"></span><span class="t">Thanks</span></span>
           </div>
-          <div class="foot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>edit</div>
+          <div class="foot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/></svg>more</div>
         </div></div>
         <figcaption>Pulled taller: two rows of three. On a narrow screen, three rows of two.</figcaption>
       </figure>
@@ -203,7 +219,7 @@ aapt2 link -I android.jar --manifest AndroidManifest.xml --java gen -o base.apk 
 javac -source 8 -target 8 -bootclasspath android.jar -d cls $(find java gen -name "*.java")
 dx --dex --min-sdk-version=26 --output=classes.dex cls
 zip -j base.apk classes.dex &amp;&amp; zipalign -p 4 base.apk aligned.apk
-apksigner sign --ks release.keystore --out pastille-1.2.apk aligned.apk</pre>
+apksigner sign --ks release.keystore --out pastille-1.3.apk aligned.apk</pre>
     <p class="fine">Two scars worth recording. The resource tools of the build machine could not read the platform jar of API 35, whose resource table is newer than they are; the build compiles against API 34 and still targets 35. And the signing key, first handed over as a bare file, arrived with every byte above 127 replaced by a question mark. Packed in an archive it came through whole, and was checked by its fingerprint before signing.</p>
   </section>
 
@@ -216,64 +232,94 @@ apksigner sign --ks release.keystore --out pastille-1.2.apk aligned.apk</pre>
 
   <footer>
     <p>Source: <a href="https://github.com/Shumtugle/pastille">github.com/Shumtugle/pastille</a><br>
-    Licence: 0BSD · Version 1.2</p>
+    Licence: 0BSD · Version 1.3</p>
   </footer>
 </div>
 
 <script>
 (function () {
-  var hues = ['#E0A84B', '#D98A6E', '#7FB0C4', '#A8C08F'];
+  var hues = ['#E0A84B', '#D98A6E', '#7FB0C4', '#A8C08F', '#B3A5E0', '#D99AB4'];
   var phrases = [
     ['Soon', 'On my way, I will be there in 20 minutes.'],
     ['Done', 'Done. Everything is checked and working.'],
     ['Busy', "Can't talk right now, I will text you later."],
-    ['Order', 'Order number: ']
+    ['Order', 'Order number: '],
+    ['Address', 'Main Street 12 B, door code 4711.'],
+    ['Thanks', 'Thank you, that helps a lot!'],
+    ['Wi-Fi', 'Network: Guest, password on the fridge.'],
+    ['Later', 'Can we move this to tomorrow morning?']
   ];
   var live = document.getElementById('live');
+  var drop = document.getElementById('drop');
+  var grid = document.getElementById('dropgrid');
   var clip = document.getElementById('clip');
-  var timer = 0;
-  var pills = phrases.map(function (p, i) {
+  var timer = 0, visible = 4;
+
+  function pillButton(i, onTap) {
     var b = document.createElement('button');
     b.className = 'pill';
-    b.setAttribute('aria-label', 'Copy: ' + p[0]);
-    b.innerHTML = '<span class="dot" style="background:' + hues[i] + '"></span><span class="t"></span>';
-    b.querySelector('.t').textContent = p[0];
-    b.addEventListener('click', function () { flash(i); });
-    live.appendChild(b);
+    b.setAttribute('aria-label', 'Copy: ' + phrases[i][0]);
+    b.innerHTML = '<span class="dot" style="background:' + hues[i % 6] + '"></span><span class="t"></span>';
+    b.querySelector('.t').textContent = phrases[i][0];
+    b.addEventListener('click', function (e) { e.stopPropagation(); onTap(b, i); });
     return b;
-  });
-  var edit = document.createElement('span');
-  edit.className = 'edit';
-  edit.setAttribute('aria-hidden', 'true');
-  edit.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5F1E8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>';
-  live.appendChild(edit);
-
-  // The widget fits as many pills as its width allows: 66 dp of chrome, 78 dp per pill.
-  function fit() {
-    var n = Math.max(1, Math.min(pills.length, Math.floor((live.clientWidth - 66) / 78)));
-    pills.forEach(function (b, i) { b.style.display = i < n ? '' : 'none'; });
   }
-  fit();
-  window.addEventListener('resize', fit);
-
-  function paint(on) {
-    pills.forEach(function (b, i) {
-      var lit = i === on;
-      b.classList.toggle('on', lit);
-      b.style.background = lit ? hues[i] : '';
-      b.style.borderColor = lit ? hues[i] : '';
-      b.querySelector('.t').textContent = lit ? 'Copied' : phrases[i][0];
-      b.querySelector('.dot').style.display = lit ? 'none' : '';
-    });
+  function light(b, i, on) {
+    b.classList.toggle('on', on);
+    b.style.background = on ? hues[i % 6] : '';
+    b.style.borderColor = on ? hues[i % 6] : '';
+    b.querySelector('.t').textContent = on ? 'Copied' : phrases[i][0];
+    b.querySelector('.dot').style.display = on ? 'none' : '';
   }
-  function flash(i) {
+  function copy(i) {
     var text = phrases[i][1];
     try { if (navigator.clipboard) navigator.clipboard.writeText(text).catch(function () {}); } catch (e) {}
     clip.textContent = 'Clipboard: ' + text;
-    clearTimeout(timer);
-    paint(i);
-    timer = setTimeout(function () { paint(-1); }, 1200);
   }
+
+  // Pills on the widget: tap, flash, fade back.
+  var pills = [];
+  for (var k = 0; k < 6; k++) {
+    pills.push(pillButton(k, function (b, i) {
+      copy(i);
+      clearTimeout(timer);
+      pills.forEach(function (p, j) { light(p, j, j === i); });
+      timer = setTimeout(function () { light(b, i, false); }, 1200);
+    }));
+    live.appendChild(pills[k]);
+  }
+  var more = document.createElement('button');
+  more.className = 'edit more';
+  more.setAttribute('aria-label', 'More phrases');
+  more.setAttribute('aria-expanded', 'false');
+  more.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5F1E8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg>';
+  live.appendChild(more);
+
+  // The drop-down: whatever did not fit in the line. A tap copies and folds it.
+  function fill() {
+    grid.innerHTML = '';
+    for (var i = visible; i < phrases.length; i++) {
+      grid.appendChild(pillButton(i, function (b, j) {
+        copy(j);
+        light(b, j, true);
+        setTimeout(fold, 450);
+      }));
+    }
+  }
+  function open() { fill(); drop.hidden = false; more.classList.add('open'); more.setAttribute('aria-expanded', 'true'); }
+  function fold() { drop.hidden = true; more.classList.remove('open'); more.setAttribute('aria-expanded', 'false'); }
+  more.addEventListener('click', function (e) { e.stopPropagation(); if (drop.hidden) open(); else fold(); });
+  document.addEventListener('click', function (e) { if (!drop.hidden && !drop.contains(e.target)) fold(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fold(); });
+
+  // The widget fits as many pills as its width allows: 66 dp of chrome, 78 dp per pill.
+  function fit() {
+    visible = Math.max(1, Math.min(6, Math.floor((live.clientWidth - 66) / 78)));
+    pills.forEach(function (b, i) { b.style.display = i < visible ? '' : 'none'; });
+    if (!drop.hidden) fill();
+  }
+  fit();
+  window.addEventListener('resize', fit);
 })();
 </script>
 </body>

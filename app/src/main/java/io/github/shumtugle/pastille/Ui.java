@@ -100,6 +100,16 @@ final class Ui {
         return b;
     }
 
+    /** A secondary pill: outline on the ground, never filled. */
+    static TextView ghost(Context c, CharSequence s) {
+        TextView b = text(c, s, 15, INK, true);
+        b.setGravity(Gravity.CENTER);
+        b.setBackground(pressable(c, 0x00000000, 26, LINE));
+        b.setClickable(true);
+        b.setFocusable(true);
+        return b;
+    }
+
     static ImageButton back(Activity a) {
         ImageButton b = new ImageButton(a);
         b.setImageResource(R.drawable.ic_back);

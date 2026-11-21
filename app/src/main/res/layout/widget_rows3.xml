@@ -76,14 +76,14 @@
     </LinearLayout>
     <LinearLayout android:layout_width="match_parent" android:layout_height="26dp"
         android:orientation="horizontal" android:gravity="center_vertical|end">
-        <LinearLayout android:id="@+id/edit" android:layout_width="wrap_content" android:layout_height="match_parent"
+        <LinearLayout android:id="@+id/more" android:layout_width="wrap_content" android:layout_height="match_parent"
             android:orientation="horizontal" android:gravity="center_vertical"
             android:paddingStart="10dp" android:paddingEnd="10dp" android:background="@drawable/edit_bg"
-            android:clickable="true" android:focusable="true" android:contentDescription="@string/edit_phrases">
-            <ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@drawable/ic_edit"
+            android:clickable="true" android:focusable="true" android:contentDescription="@string/a11y_more">
+            <ImageView android:layout_width="14dp" android:layout_height="14dp" android:src="@drawable/ic_chevron_small"
                 android:importantForAccessibility="no" />
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginStart="6dp" android:text="@string/edit_short" android:textSize="12sp"
+                android:layout_marginStart="6dp" android:text="@string/more_short" android:textSize="12sp"
                 android:textColor="#A6F5F1E8" android:fontFamily="sans-serif-medium" />
         </LinearLayout>
     </LinearLayout>

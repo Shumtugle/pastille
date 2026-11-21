@@ -32,9 +32,16 @@ public class EditorActivity extends Activity {
     private int widgetId;
     private int glass;
     private final TextView[] glassChips = new TextView[PillStore.GLASS.length];
-    private final EditText[] labels = new EditText[PillStore.COUNT];
-    private final EditText[] texts = new EditText[PillStore.COUNT];
-    private final View[] heads = new View[PillStore.COUNT];
+    private final EditText[] labels = new EditText[PillStore.MAX];
+    private final EditText[] texts = new EditText[PillStore.MAX];
+    private final View[] heads = new View[PillStore.MAX];
+    /** Plates on screen: every slot up to the last phrase, at least the widget's own six. */
+    private int shown;
+    /** Where the widget stops and the drop-down begins. */
+    private int visible;
+    private LinearLayout list;
+    private TextView addMore;
+    private ScrollView scroll;
 
     static Intent intent(Context c, int widgetId, int slot) {
         return new Intent(c, EditorActivity.class)
@@ -102,16 +109,36 @@ public class EditorActivity extends Activity {
         root.addView(chips, Ui.lp(-1, -2, Ui.dp(this, 8)));
         paintGlass();
 
-        final ScrollView scroll = new ScrollView(this);
+        scroll = new ScrollView(this);
         scroll.setClipToPadding(false);
         scroll.setVerticalScrollBarEnabled(false);
-        LinearLayout list = new LinearLayout(this);
+        list = new LinearLayout(this);
         list.setOrientation(LinearLayout.VERTICAL);
         list.setPadding(0, Ui.dp(this, 8), 0, Ui.dp(this, 24));
         scroll.addView(list);
         root.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1f));
 
-        for (int i = 0; i < PillStore.COUNT; i++) addSlot(list, i);
+        visible = PillStore.visible(this, widgetId);
+        int need = Math.max(PillStore.ON_WIDGET, PillStore.lastFilled(this, widgetId) + 2);
+        if (focus >= 0) need = Math.max(need, focus + 1);
+        if (state != null) need = Math.max(need, state.getInt("shown", need));
+        need = Math.min(PillStore.MAX, need);
+        for (int i = 0; i < need; i++) addSlot(i);
+
+        addMore = Ui.ghost(this, getString(R.string.editor_add));
+        addMore.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                if (shown >= PillStore.MAX) return;
+                final int i = shown;
+                addSlot(i);
+                texts[i].requestFocus();
+                scroll.post(new Runnable() {
+                    @Override public void run() { scroll.smoothScrollTo(0, heads[i].getTop()); }
+                });
+            }
+        });
+        list.addView(addMore, Ui.lp(-1, Ui.dp(this, 52), Ui.dp(this, 28)));
+        paintAddMore();
 
         View rule = new View(this);
         rule.setBackgroundColor(Ui.RULE);
@@ -124,7 +151,7 @@ public class EditorActivity extends Activity {
         dp.bottomMargin = Ui.dp(this, 16);
         root.addView(done, dp);
 
-        if (focus >= 0 && focus < PillStore.COUNT) {
+        if (focus >= 0 && focus < shown) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
                     | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
             final EditText target = texts[focus].getText().length() == 0 ? texts[focus] : labels[focus];
@@ -150,14 +177,31 @@ public class EditorActivity extends Activity {
     protected void onSaveInstanceState(Bundle out) {
         super.onSaveInstanceState(out);
         out.putInt("glass", glass);
+        out.putInt("shown", shown);
     }
 
-    private void addSlot(LinearLayout list, final int i) {
+    private void paintAddMore() {
+        addMore.setVisibility(shown < PillStore.MAX ? View.VISIBLE : View.GONE);
+    }
+
+    /** Adds the plate for slot {@code i} at the end of the list, before the add button if it is there. */
+    private void addSlot(final int i) {
+        int at = addMore == null ? list.getChildCount() : list.indexOfChild(addMore);
+        if (i == 0 || i == visible) {
+            TextView where = Ui.section(this, getString(i == 0 ? R.string.editor_on_widget : R.string.editor_under_arrow));
+            where.setTextColor(Ui.INK);
+            where.setTextSize(15);
+            list.addView(where, at++, Ui.lp(-1, -2, Ui.dp(this, i == 0 ? 12 : 40)));
+            if (i == visible) {
+                TextView hint = Ui.text(this, getString(R.string.editor_under_arrow_hint), 13, Ui.HINT, false);
+                list.addView(hint, at++, Ui.lp(-1, -2, Ui.dp(this, 2)));
+            }
+        }
         LinearLayout head = new LinearLayout(this);
         head.setOrientation(LinearLayout.HORIZONTAL);
         head.setGravity(Gravity.CENTER_VERTICAL);
         View dot = new View(this);
-        dot.setBackground(Ui.dot(this, Ui.HUES[i], 10));
+        dot.setBackground(Ui.dot(this, Ui.HUES[i % PillStore.HUES], 10));
         head.addView(dot, Ui.lp(Ui.dp(this, 10), Ui.dp(this, 10)));
         TextView name = Ui.section(this, getString(R.string.editor_slot, i + 1));
         LinearLayout.LayoutParams np = new LinearLayout.LayoutParams(0, -2, 1f);
@@ -167,7 +211,7 @@ public class EditorActivity extends Activity {
         clear.setTextSize(13);
         head.addView(clear);
         heads[i] = head;
-        list.addView(head, Ui.lp(-1, -2, Ui.dp(this, i == 0 ? 12 : 28)));
+        list.addView(head, at++, Ui.lp(-1, -2, Ui.dp(this, i == 0 || i == visible ? 14 : 28)));
 
         LinearLayout plate = new LinearLayout(this);
         plate.setOrientation(LinearLayout.VERTICAL);
@@ -192,7 +236,9 @@ public class EditorActivity extends Activity {
         texts[i].setText(PillStore.text(this, widgetId, i));
         plate.addView(texts[i], Ui.lp(-1, -2, Ui.dp(this, 4)));
 
-        list.addView(plate, Ui.lp(-1, -2, Ui.dp(this, 8)));
+        list.addView(plate, at, Ui.lp(-1, -2, Ui.dp(this, 8)));
+        shown = Math.max(shown, i + 1);
+        if (addMore != null) paintAddMore();
 
         clear.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -237,9 +283,9 @@ public class EditorActivity extends Activity {
 
     private boolean save() {
         if (!isOurs(this, widgetId)) return false;
-        String[] l = new String[PillStore.COUNT];
-        String[] t = new String[PillStore.COUNT];
-        for (int i = 0; i < PillStore.COUNT; i++) {
+        String[] l = new String[PillStore.MAX];
+        String[] t = new String[PillStore.MAX];
+        for (int i = 0; i < shown; i++) {
             l[i] = labels[i].getText().toString().trim();
             // The phrase is kept exactly as typed: spaces, line breaks, punctuation.
             t[i] = texts[i].getText().toString();

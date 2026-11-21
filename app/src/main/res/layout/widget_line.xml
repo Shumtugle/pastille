@@ -68,8 +68,8 @@
                 android:fontFamily="sans-serif-medium" android:maxLines="2" android:ellipsize="end"
                 android:includeFontPadding="false" android:text="@string/pill_empty" />
         </LinearLayout>
-    <ImageView android:id="@+id/edit" android:layout_width="46dp" android:layout_height="46dp"
-        android:layout_margin="3dp" android:scaleType="center" android:src="@drawable/ic_edit_big"
+    <ImageView android:id="@+id/more" android:layout_width="46dp" android:layout_height="46dp"
+        android:layout_margin="3dp" android:scaleType="center" android:src="@drawable/ic_chevron_down"
         android:background="@drawable/edit_circle" android:clickable="true" android:focusable="true"
-        android:contentDescription="@string/edit_phrases" />
+        android:contentDescription="@string/a11y_more" />
 </LinearLayout>
