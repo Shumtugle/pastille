@@ -65,9 +65,21 @@
   .drop{border-radius:30px;border:1px solid var(--edge);background:rgba(14,16,20,.92);padding:7px 7px 2px;box-shadow:0 12px 30px rgba(0,0,0,.45);animation:drop .16s ease-out}
   .drop[hidden]{display:none}
   @keyframes drop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
-  .dropgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
-  .dropgrid .pill{height:52px;border-radius:26px;gap:9px;padding:0 12px 0 14px;font-size:14px}
-  .dropfoot{display:flex;justify-content:space-between;align-items:center;height:40px;padding:0 12px;font-size:13px;font-weight:600;color:rgba(245,241,232,.65)}
+  .dropgrid{max-height:420px;overflow-y:auto;overscroll-behavior:contain}
+  .drophint{font-size:12px;color:var(--off);padding:6px 12px 0}
+  .drophead{font-size:13px;font-weight:700;color:var(--dim);padding:14px 12px 6px}
+  .masonry{display:flex;gap:0;align-items:flex-start}
+  .masonry .col{flex:1 1 0;min-width:0;display:flex;flex-direction:column}
+  .note{all:unset;box-sizing:border-box;display:block;margin:4px;padding:14px 16px;border-radius:22px;border:1px solid var(--edge);background:rgba(255,255,255,.08);cursor:pointer;text-align:left;transition:background-color .18s ease}
+  .note:focus-visible{outline:2px solid var(--text);outline-offset:2px}
+  .note .top{display:flex;gap:9px;align-items:flex-start}
+  .note .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:6px}
+  .note .ti{font-size:16px;font-weight:600;color:var(--text);line-height:1.35}
+  .note .bo{font-size:14px;color:var(--dim);line-height:1.45;margin-top:8px;white-space:pre-line;display:-webkit-box;-webkit-line-clamp:7;-webkit-box-orient:vertical;overflow:hidden}
+  .note .top .bo{margin-top:0;-webkit-line-clamp:9}
+  .note.on .ti{color:#0E1014}
+  .dropfoot{display:flex;justify-content:space-between;align-items:center;height:60px;padding:0 4px 0 12px;font-size:13px;font-weight:600;color:rgba(245,241,232,.65)}
+  .fab{width:52px;height:52px;border-radius:18px;background:var(--text);color:#0E1014;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:400;line-height:1}
   .dropfoot span{display:flex;align-items:center;gap:6px}
   .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
   .grid3 .pill{height:52px;border-radius:26px;gap:8px;padding:0 12px 0 14px;font-size:14px}
@@ -106,7 +118,7 @@
 
   <div class="top">
     <img src="icon.png" alt="Pastille icon">
-    <span><b>Pastille</b> — version 1.3 · Android 8.0+ · 59 kB</span>
+    <span><b>Pastille</b> — version 1.4 · Android 8.0+ · 63 kB</span>
   </div>
 
   <header>
@@ -116,7 +128,7 @@
       <p class="lede">Six phrases under your thumb.</p>
       <p class="sub">A line of glass on the home screen. Tap a pill and its phrase is on the clipboard, ready to paste into any message, form or note.</p>
       <div class="cta">
-        <a class="btn" href="pastille-1.3.apk">Download APK</a>
+        <a class="btn" href="pastille-1.4.apk">Download APK</a>
         <a class="btn ghost" href="https://github.com/Shumtugle/pastille">Source on GitHub</a>
       </div>
       <p class="fine">No permissions at all. No internet, no accounts, no ads, no tracking.</p>
@@ -125,7 +137,7 @@
       <div class="card" id="live"></div>
       <div class="drop" id="drop" hidden>
         <div class="dropgrid" id="dropgrid"></div>
-        <div class="dropfoot"><span>+ Add</span><span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>edit</span></div>
+        <div class="dropfoot"><span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>edit all</span><span class="fab" aria-hidden="true">+</span></div>
       </div>
       <div class="clip" id="clip" aria-live="polite">Tap a pill, or the arrow for the rest. On this page it really copies.</div>
     </div>
@@ -139,7 +151,7 @@
     <ul class="rules">
       <li><b>One tap, no window.</b> The phrase goes to the clipboard straight from the home screen. Nothing opens, nothing flickers; the pill floods with its own colour for a moment and returns.</li>
       <li><b>Colour by place.</b> Each of the six places has its own colour, and it never moves. The hand learns that the blue pill says "busy" before the eye has read the label.</li>
-      <li><b>More under the arrow.</b> The line holds as many pills as fit; the round arrow at its end drops a panel of glass right under the widget with the rest, up to twenty-four phrases in all. A tap there copies just the same, and the panel folds away.</li>
+      <li><b>Notes under the arrow.</b> The line holds as many pills as fit; the round arrow at its end drops a sheet of glass right under the widget with every note as a card, in two uneven columns, each card as tall as its text. Up to forty-eight in all. A tap copies the whole note and the sheet folds away; holding a card opens it to edit; the round + writes a new one.</li>
       <li><b>An empty pill asks to be filled.</b> A dashed outline. Tap it and the editor opens on exactly that slot.</li>
       <li><b>Leaving saves.</b> Back, Done, Home, a swipe away: whatever was typed in the editor is kept. There is no way to lose six phrases by a slip of the thumb.</li>
       <li><b>Every widget is its own.</b> Put two on the home screen, one for work and one for home, and each keeps its own six phrases and its own glass.</li>
@@ -219,7 +231,7 @@ aapt2 link -I android.jar --manifest AndroidManifest.xml --java gen -o base.apk 
 javac -source 8 -target 8 -bootclasspath android.jar -d cls $(find java gen -name "*.java")
 dx --dex --min-sdk-version=26 --output=classes.dex cls
 zip -j base.apk classes.dex &amp;&amp; zipalign -p 4 base.apk aligned.apk
-apksigner sign --ks release.keystore --out pastille-1.3.apk aligned.apk</pre>
+apksigner sign --ks release.keystore --out pastille-1.4.apk aligned.apk</pre>
     <p class="fine">Two scars worth recording. The resource tools of the build machine could not read the platform jar of API 35, whose resource table is newer than they are; the build compiles against API 34 and still targets 35. And the signing key, first handed over as a bare file, arrived with every byte above 127 replaced by a question mark. Packed in an archive it came through whole, and was checked by its fingerprint before signing.</p>
   </section>
 
@@ -232,7 +244,7 @@ apksigner sign --ks release.keystore --out pastille-1.3.apk aligned.apk</pre>
 
   <footer>
     <p>Source: <a href="https://github.com/Shumtugle/pastille">github.com/Shumtugle/pastille</a><br>
-    Licence: 0BSD · Version 1.3</p>
+    Licence: 0BSD · Version 1.4</p>
   </footer>
 </div>
 
@@ -244,10 +256,12 @@ apksigner sign --ks release.keystore --out pastille-1.3.apk aligned.apk</pre>
     ['Done', 'Done. Everything is checked and working.'],
     ['Busy', "Can't talk right now, I will text you later."],
     ['Order', 'Order number: '],
-    ['Address', 'Main Street 12 B, door code 4711.'],
+    ['Address', 'Main Street 12 B, second staircase.\nDoor code 4711.\nThird floor, the door on the left.'],
     ['Thanks', 'Thank you, that helps a lot!'],
-    ['Wi-Fi', 'Network: Guest, password on the fridge.'],
-    ['Later', 'Can we move this to tomorrow morning?']
+    ['Wi-Fi', 'Network: Guest\nPassword on the fridge, under the lemon magnet.'],
+    ['', 'Can we move this to tomorrow morning? I will be free from nine and can come to you.'],
+    ['Report', 'Work done:\n- cable checked end to end\n- signal in norm on all ports\n- old splitter replaced\nNothing left open.'],
+    ['Later', 'Call back after five.']
   ];
   var live = document.getElementById('live');
   var drop = document.getElementById('drop');
@@ -296,17 +310,51 @@ apksigner sign --ks release.keystore --out pastille-1.3.apk aligned.apk</pre>
   live.appendChild(more);
 
   // The drop-down: whatever did not fit in the line. A tap copies and folds it.
-  function fill() {
-    grid.innerHTML = '';
-    for (var i = visible; i < phrases.length; i++) {
-      grid.appendChild(pillButton(i, function (b, j) {
-        copy(j);
-        light(b, j, true);
-        setTimeout(fold, 450);
-      }));
+  function card(i) {
+    var b = document.createElement('button');
+    b.className = 'note';
+    var p = phrases[i], titled = p[0] !== '';
+    b.setAttribute('aria-label', 'Copy: ' + (p[0] || p[1]));
+    b.innerHTML = '<div class="top"><span class="dot" style="background:' + hues[i % 6] + '"></span>' +
+      (titled ? '<span class="ti"></span>' : '<span class="bo"></span>') + '</div>' +
+      (titled && p[1] !== p[0] ? '<div class="bo"></div>' : '');
+    if (titled) b.querySelector('.ti').textContent = p[0];
+    var bodies = b.querySelectorAll('.bo');
+    if (bodies.length) bodies[bodies.length - 1].textContent = p[1];
+    b.addEventListener('click', function (e) {
+      e.stopPropagation();
+      copy(i);
+      b.classList.add('on');
+      b.style.background = hues[i % 6];
+      b.style.borderColor = hues[i % 6];
+      b.innerHTML = '<div class="ti" style="color:#0E1014">Copied</div>';
+      setTimeout(fold, 450);
+    });
+    return b;
+  }
+  // Two columns that fill unevenly: each card goes under the shorter column, as in the app.
+  function section(title, from, to) {
+    if (from >= to) return;
+    var h = document.createElement('div');
+    h.className = 'drophead';
+    h.textContent = title;
+    grid.appendChild(h);
+    var m = document.createElement('div');
+    m.className = 'masonry';
+    var cols = [document.createElement('div'), document.createElement('div')];
+    cols.forEach(function (c) { c.className = 'col'; m.appendChild(c); });
+    grid.appendChild(m);
+    for (var i = from; i < to; i++) {
+      var c = cols[0].offsetHeight <= cols[1].offsetHeight ? cols[0] : cols[1];
+      c.appendChild(card(i));
     }
   }
-  function open() { fill(); drop.hidden = false; more.classList.add('open'); more.setAttribute('aria-expanded', 'true'); }
+  function fill() {
+    grid.innerHTML = '<div class="drophint">Tap to copy, hold to open.</div>';
+    section('On the widget', 0, visible);
+    section('Others', visible, phrases.length);
+  }
+  function open() { drop.hidden = false; fill(); more.classList.add('open'); more.setAttribute('aria-expanded', 'true'); }
   function fold() { drop.hidden = true; more.classList.remove('open'); more.setAttribute('aria-expanded', 'false'); }
   more.addEventListener('click', function (e) { e.stopPropagation(); if (drop.hidden) open(); else fold(); });
   document.addEventListener('click', function (e) { if (!drop.hidden && !drop.contains(e.target)) fold(); });

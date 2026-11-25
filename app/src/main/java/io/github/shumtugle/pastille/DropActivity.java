@@ -8,7 +8,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -26,9 +25,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 /**
- * The drop-down under the widget's arrow: the phrases that did not fit on the widget,
- * as pills on the same glass. A tap copies, the pill flashes, the panel folds away.
- * A tap outside folds it without copying.
+ * The drop-down under the widget's arrow: every note as a card on the same glass, the ones on
+ * the widget first, then the rest. A tap copies, the card flashes, the panel folds away; a long
+ * press opens the note. A tap outside folds it without copying.
  */
 public class DropActivity extends Activity {
     private static final long FOLD_AFTER_MS = 450;
@@ -93,33 +92,23 @@ public class DropActivity extends Activity {
         scroll.addView(grid);
         panel.addView(scroll, new LinearLayout.LayoutParams(-1, -2));
 
-        int from = PillStore.visible(this, widgetId);
+        int visible = PillStore.visible(this, widgetId);
         int last = PillStore.lastFilled(this, widgetId);
-        LinearLayout row = null;
-        int inRow = 0;
-        for (int i = from; i <= last; i++) {
-            if (PillStore.text(this, widgetId, i).isEmpty()) continue;
-            if (row == null || inRow == 2) {
-                row = new LinearLayout(this);
-                row.setOrientation(LinearLayout.HORIZONTAL);
-                grid.addView(row, new LinearLayout.LayoutParams(-1, -2));
-                inRow = 0;
-            }
-            row.addView(pill(i), new LinearLayout.LayoutParams(0, Ui.dp(this, 56), 1f));
-            inRow++;
-        }
-        if (row != null && inRow == 1) {
-            // Keep the last pill its width instead of stretching it across the row.
-            row.addView(new View(this), new LinearLayout.LayoutParams(0, 1, 1f));
-        }
-        if (grid.getChildCount() == 0) {
+        boolean any = false;
+        TextView hint = Ui.text(this, getString(R.string.drop_hint), 12, Ui.HINT, false);
+        hint.setPadding(Ui.dp(this, 12), Ui.dp(this, 6), Ui.dp(this, 12), 0);
+        grid.addView(hint);
+        any |= section(grid, R.string.drop_on_widget, 0, Math.min(visible, last + 1));
+        any |= section(grid, R.string.drop_others, visible, last + 1);
+        if (!any) {
+            grid.removeView(hint);
             TextView none = Ui.text(this, getString(R.string.drop_empty), 15, Ui.MUTED, false);
             int p = Ui.dp(this, 14);
             none.setPadding(p, p, p, Ui.dp(this, 6));
             grid.addView(none);
         }
 
-        panel.addView(footer(from), new LinearLayout.LayoutParams(-1, Ui.dp(this, 44)));
+        panel.addView(footer(visible), new LinearLayout.LayoutParams(-1, Ui.dp(this, 60)));
 
         final int side = Ui.dp(this, 4);
         FrameLayout.LayoutParams plp = new FrameLayout.LayoutParams(-1, -2, Gravity.TOP);
@@ -191,100 +180,192 @@ public class DropActivity extends Activity {
         return in.getSystemWindowInsetBottom();
     }
 
-    private View pill(final int slot) {
-        final int hue = Ui.HUES[slot % PillStore.HUES];
-        final LinearLayout p = new LinearLayout(this);
-        p.setOrientation(LinearLayout.HORIZONTAL);
-        p.setGravity(Gravity.CENTER_VERTICAL);
-        p.setPadding(Ui.dp(this, 14), 0, Ui.dp(this, 12), 0);
-        p.setBackground(Ui.pressable(this, PILL_FILL, 28, EDGE));
-        p.setClickable(true);
-        p.setFocusable(true);
-        final String shown = PillStore.shown(this, widgetId, slot);
-        p.setContentDescription(getString(R.string.a11y_copy, shown));
+    /**
+     * A heading and the notes of slots [from, to) laid out in two columns that fill unevenly,
+     * each card as tall as its text: a new card goes under the shorter column.
+     */
+    private boolean section(LinearLayout grid, int heading, int from, int to) {
+        LinearLayout left = column(), right = column();
+        int hl = 0, hr = 0;
+        boolean any = false;
+        for (int i = from; i < to; i++) {
+            if (PillStore.text(this, widgetId, i).isEmpty()) continue;
+            int h = estimate(i);
+            if (hl <= hr) { left.addView(card(i)); hl += h; } else { right.addView(card(i)); hr += h; }
+            any = true;
+        }
+        if (!any) return false;
+        TextView head = Ui.text(this, getString(heading), 13, Ui.MUTED, true);
+        head.setPadding(Ui.dp(this, 12), Ui.dp(this, 14), 0, Ui.dp(this, 6));
+        grid.addView(head);
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.addView(left, new LinearLayout.LayoutParams(0, -2, 1f));
+        row.addView(right, new LinearLayout.LayoutParams(0, -2, 1f));
+        grid.addView(row, new LinearLayout.LayoutParams(-1, -2));
+        return true;
+    }
 
+    private LinearLayout column() {
+        LinearLayout c = new LinearLayout(this);
+        c.setOrientation(LinearLayout.VERTICAL);
+        return c;
+    }
+
+    /** Rough height of a card in lines, only to keep the two columns level. */
+    private int estimate(int slot) {
+        int lines = 2;
+        if (!PillStore.label(this, widgetId, slot).trim().isEmpty()) lines += 2;
+        int body = 0;
+        for (String par : PillStore.text(this, widgetId, slot).split("\n", -1)) {
+            body += Math.max(1, (par.length() + 19) / 20);
+        }
+        return lines + Math.min(body, CARD_LINES);
+    }
+
+    private static final int CARD_LINES = 9;
+
+    private View card(final int slot) {
+        final int hue = Ui.HUES[slot % PillStore.HUES];
+        final String label = PillStore.label(this, widgetId, slot).trim();
+        final String text = PillStore.text(this, widgetId, slot);
+        final String shown = PillStore.shown(this, widgetId, slot);
+
+        final LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.VERTICAL);
+        int ph = Ui.dp(this, 16), pv = Ui.dp(this, 14);
+        card.setPadding(ph, pv, ph, pv);
+        card.setBackground(Ui.pressable(this, PILL_FILL, 22, EDGE));
+        card.setClickable(true);
+        card.setLongClickable(true);
+        card.setFocusable(true);
+        card.setContentDescription(getString(R.string.a11y_copy, shown));
+
+        LinearLayout top = new LinearLayout(this);
+        top.setOrientation(LinearLayout.HORIZONTAL);
+        top.setGravity(Gravity.TOP);
         final View dot = new View(this);
         dot.setBackground(Ui.dot(this, hue, 9));
-        p.addView(dot, new LinearLayout.LayoutParams(Ui.dp(this, 9), Ui.dp(this, 9)));
+        LinearLayout.LayoutParams dp = new LinearLayout.LayoutParams(Ui.dp(this, 9), Ui.dp(this, 9));
+        dp.topMargin = Ui.dp(this, 6);
+        top.addView(dot, dp);
 
-        final TextView label = Ui.text(this, shown, 14, Ui.INK, true);
-        label.setMaxLines(2);
-        label.setEllipsize(TextUtils.TruncateAt.END);
-        label.setIncludeFontPadding(false);
-        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(0, -2, 1f);
-        llp.leftMargin = Ui.dp(this, 9);
-        p.addView(label, llp);
+        boolean titled = !label.isEmpty();
+        final TextView head = Ui.text(this, titled ? label : text.trim(), titled ? 16 : 14,
+                titled ? Ui.INK : Ui.MUTED, titled);
+        head.setMaxLines(titled ? 2 : CARD_LINES);
+        head.setEllipsize(TextUtils.TruncateAt.END);
+        head.setLineSpacing(Ui.dp(this, 2), 1f);
+        LinearLayout.LayoutParams hp = new LinearLayout.LayoutParams(0, -2, 1f);
+        hp.leftMargin = Ui.dp(this, 9);
+        top.addView(head, hp);
+        card.addView(top);
 
-        FrameLayout.LayoutParams outer = new FrameLayout.LayoutParams(-1, -1);
-        int m = Ui.dp(this, 3);
+        TextView bodyView = null;
+        if (titled && !text.trim().equals(label)) {
+            bodyView = Ui.text(this, text.trim(), 14, Ui.MUTED, false);
+            bodyView.setMaxLines(CARD_LINES - 2);
+            bodyView.setEllipsize(TextUtils.TruncateAt.END);
+            bodyView.setLineSpacing(Ui.dp(this, 2), 1f);
+            LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(-1, -2);
+            bp.topMargin = Ui.dp(this, 8);
+            card.addView(bodyView, bp);
+        }
+        final TextView body = bodyView;
+
+        LinearLayout.LayoutParams outer = new LinearLayout.LayoutParams(-1, -2);
+        int m = Ui.dp(this, 4);
         outer.setMargins(m, m, m, m);
-        FrameLayout wrap = new FrameLayout(this);
-        wrap.addView(p, outer);
+        card.setLayoutParams(outer);
 
-        p.setOnClickListener(new View.OnClickListener() {
+        card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (done) return;
-                // Read at tap time, so a phrase edited a moment ago is the one copied.
-                String text = PillStore.text(DropActivity.this, widgetId, slot);
-                if (text.isEmpty()) return;
+                // Read at tap time, so a note edited a moment ago is the one copied.
+                String now = PillStore.text(DropActivity.this, widgetId, slot);
+                if (now.isEmpty()) return;
                 try {
                     ClipboardManager cb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                     if (cb == null) return;
-                    cb.setPrimaryClip(ClipData.newPlainText(shown, text));
+                    cb.setPrimaryClip(ClipData.newPlainText(shown, now));
                 } catch (RuntimeException e) {
                     return;
                 }
                 done = true;
-                p.setBackground(Ui.shape(DropActivity.this, hue, 28, 0));
+                card.setBackground(Ui.shape(DropActivity.this, hue, 22, 0));
                 dot.setVisibility(View.GONE);
-                label.setText(R.string.pill_copied);
-                label.setTextColor(0xFF0E1014);
-                label.setGravity(Gravity.CENTER);
-                p.postDelayed(new Runnable() {
+                if (body != null) body.setVisibility(View.GONE);
+                head.setText(R.string.pill_copied);
+                head.setTextColor(0xFF0E1014);
+                head.setTypeface(Ui.MEDIUM);
+                head.setTextSize(16);
+                card.postDelayed(new Runnable() {
                     @Override public void run() { fold(); }
                 }, FOLD_AFTER_MS);
             }
         });
-        return wrap;
+        card.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (done) return true;
+                openNote(slot);
+                return true;
+            }
+        });
+        return card;
     }
 
-    private View footer(final int from) {
+    private View footer(final int visible) {
         LinearLayout f = new LinearLayout(this);
         f.setOrientation(LinearLayout.HORIZONTAL);
         f.setGravity(Gravity.CENTER_VERTICAL);
         f.setPadding(Ui.dp(this, 4), 0, Ui.dp(this, 4), 0);
 
-        final int free = PillStore.firstEmpty(this, widgetId, from);
-        if (free >= 0) {
-            TextView add = small(getString(R.string.drop_add));
-            add.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) { openEditor(free); }
-            });
-            f.addView(add);
-        }
-        f.addView(new View(this), new LinearLayout.LayoutParams(0, 1, 1f));
-        TextView edit = small(getString(R.string.edit_short));
-        edit.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_edit, 0, 0, 0);
-        edit.setCompoundDrawablePadding(Ui.dp(this, 6));
-        edit.setContentDescription(getString(R.string.edit_phrases));
-        edit.setOnClickListener(new View.OnClickListener() {
+        TextView all = small(getString(R.string.drop_edit_all));
+        all.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_edit, 0, 0, 0);
+        all.setCompoundDrawablePadding(Ui.dp(this, 6));
+        all.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) { openEditor(-1); }
         });
-        f.addView(edit);
+        f.addView(all);
+        f.addView(new View(this), new LinearLayout.LayoutParams(0, 1, 1f));
+
+        int free = PillStore.firstEmpty(this, widgetId, visible);
+        if (free < 0) free = PillStore.firstEmpty(this, widgetId, 0);
+        final int slot = free;
+        if (slot >= 0) {
+            TextView add = Ui.text(this, "+", 26, Ui.BG, false);
+            add.setGravity(Gravity.CENTER);
+            add.setIncludeFontPadding(false);
+            add.setBackground(Ui.pressable(this, Ui.INK, 18, 0));
+            add.setClickable(true);
+            add.setContentDescription(getString(R.string.drop_new));
+            add.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) { openNote(slot); }
+            });
+            LinearLayout.LayoutParams ap = new LinearLayout.LayoutParams(Ui.dp(this, 52), Ui.dp(this, 52));
+            ap.rightMargin = Ui.dp(this, 2);
+            f.addView(add, ap);
+        }
         return f;
     }
 
     private TextView small(String s) {
         TextView t = Ui.text(this, s, 13, 0xA6F5F1E8, true);
-        t.setTypeface(Ui.MEDIUM, Typeface.NORMAL);
         t.setGravity(Gravity.CENTER_VERTICAL);
         int p = Ui.dp(this, 10);
         t.setPadding(p, 0, p, 0);
-        t.setMinHeight(Ui.dp(this, 40));
+        t.setMinHeight(Ui.dp(this, 44));
         t.setBackground(Ui.pressable(this, 0x00000000, 20, 0));
         t.setClickable(true);
         return t;
+    }
+
+    private void openNote(int slot) {
+        startActivity(NoteActivity.intent(this, widgetId, slot).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        finish();
+        overridePendingTransition(0, 0);
     }
 
     private void openEditor(int slot) {

@@ -5,7 +5,7 @@
 A home-screen widget with a line of pills and more under its arrow. Each pill holds a phrase; one tap puts it on the clipboard, ready to paste anywhere.
 
 - Out of the box it is a single glass line, four cells wide: four pills and a round arrow.
-- The arrow drops a glass panel under the widget with the phrases that did not fit, up to twenty-four in all. A tap there copies too, and the panel folds away.
+- The arrow drops a sheet of glass under the widget with every note as a card, in two uneven columns. A tap copies the whole note and the sheet folds away; holding a card opens it on its own screen; the round + writes a new one. Up to forty-eight notes.
 - Stretch it wider and more pills fit in the line, up to six. Stretch it taller and the six pills go into two rows of three, then three rows of two.
 - Tap a pill: the phrase is copied and the pill floods with its colour for a moment. No window opens.
 - Tap an empty pill: the editor opens on that slot.
@@ -35,8 +35,9 @@ The signed APK lands in `out/`. Making a release: `RELEASE.md`.
 | File | Role |
 | --- | --- |
 | `PastilleWidget.java` | Widget rendering, the copy action and its flash |
-| `DropActivity.java` | The drop-down under the arrow |
-| `PillStore.java` | Up to twenty-four phrases per widget, one preferences file each |
+| `DropActivity.java` | The sheet of notes under the arrow |
+| `NoteActivity.java` | One note on its own screen |
+| `PillStore.java` | Up to forty-eight notes per widget, one preferences file each |
 | `EditorActivity.java` | Configuration step and editor, one screen |
 | `MainActivity.java` | Launcher screen: placed widgets, adding one |
 | `Ui.java` | Palette and view builders |

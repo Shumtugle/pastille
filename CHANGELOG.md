@@ -1,5 +1,16 @@
 # Changes
 
+## 1.4
+
+- The drop-down under the arrow is now a sheet of notes: every note as a card
+  in two uneven columns, each card as tall as its text, the ones on the widget
+  first and the others below. A tap copies the whole note and the sheet folds;
+  holding a card opens it.
+- A note has its own screen: a title and the text, full height. Leaving saves;
+  deleting takes a second tap.
+- A round + at the foot of the sheet writes a new note. A widget holds up to
+  forty-eight.
+
 ## 1.3
 
 - The round button at the end of the line is now an arrow. It drops a panel of

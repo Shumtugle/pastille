@@ -9,7 +9,7 @@ import android.content.SharedPreferences;
  */
 final class PillStore {
     /** Phrases a widget can hold in all. */
-    static final int MAX = 24;
+    static final int MAX = 48;
     /** Pills the widget itself can draw; the rest only ever live in the drop-down. */
     static final int ON_WIDGET = 6;
     /** Hues repeat every six places. */
@@ -95,6 +95,15 @@ final class PillStore {
             e.putString("text_" + i, t);
         }
         return e.commit();
+    }
+
+    /** Saves one slot and leaves every other untouched. */
+    static boolean saveOne(Context c, int widgetId, int slot, String label, String text) {
+        if (slot < 0 || slot >= MAX) return false;
+        return prefs(c, widgetId).edit()
+                .putString("label_" + slot, label == null ? "" : label)
+                .putString("text_" + slot, text == null ? "" : text)
+                .commit();
     }
 
     static void delete(Context c, int widgetId) {

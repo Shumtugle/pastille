@@ -28,6 +28,10 @@
             android:excludeFromRecents="true" android:taskAffinity=""
             android:noHistory="true" />
 
+        <activity android:name=".NoteActivity" android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:excludeFromRecents="true" android:taskAffinity="" />
+
         <receiver android:name=".PastilleWidget" android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
